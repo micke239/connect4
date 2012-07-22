@@ -1,7 +1,5 @@
-This repository contains the implementation of my client-server connect4 application. 
+This repository contains the my client-server connect4 application. 
 
-The server is written as a node.js application.
-
-Currently, the only client is a html5 application.
+The server is written with node.js and the only current client with html5 with websockets.
 
 
