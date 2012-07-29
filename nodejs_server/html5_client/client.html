@@ -1,6 +1,8 @@
+<!DOCTYPE html>
 <html>
 <head>
 	<link href="/css/bootstrap.css" rel="stylesheet"/>
+	<link href="/css/style.css" rel="stylesheet"/>
 	<script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
 	<script type="text/javascript" src="/js/bootstrap.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
@@ -10,6 +12,11 @@
 		$(document).ready(function() {
 			var socket = io.connect('http://localhost:4711/');
 			
+			$.get('/view/login.html', function(data) {
+				$('#content').html(data);
+			});
+		});
+			/*
 			socket.emit('loginAsGuest');
 			
 			var shouldJoinLobby = true;
@@ -35,12 +42,6 @@
 			
 			socket.on('userLeftLobby', function(userName) {
 				removeFrenemyFromLobby(userName);
-			});
-			
-			$('#selectedFrenemy').click(function() {
-				if ($('#users li.active a').text()) {
-					socket.emit('requestGame', $('#users li.active a').text());
-				}
 			});
 		});
 		
@@ -77,11 +78,13 @@
 					}
 				});
 			});
-		};
+		};*/
  	</script>
 </head>
 <body>
-	<div class="alert alert-info" style="display:none;width:365px;margin:5px 0 0 5px;" id="confirm_box">
+	<div id="content">
+	</div>
+<!--	<div class="alert alert-info" style="display:none;width:365px;margin:5px 0 0 5px;" id="confirm_box">
 		<text>hello</text>
 		<div style="margin-top:5px;">
 			<button class="btn btn-success" style="">Yes! Please!</button>
@@ -95,6 +98,6 @@
 	<div style="margin:5px 0 0 5px; width:200px;display:inline-block;">
 		<ul class="nav nav-tabs nav-stacked" id="users">
 		</ul>
-	</div>
+	</div>-->
 </body>
 </html>
