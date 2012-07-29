@@ -1,2 +1,24 @@
-This repository contains my client-server connect4 application.
+# connect 4
 
+This repository will contain my connect 4 server, and all the its clients. At start, however, there will only be a html5 client.
+
+## server
+
+The server is written with node.js. As this is my first time with a node.js application, my goal is to develop an application with a great event-driven server architecture and design.
+
+### dependencies
+
+Currently (this WILL change a lot), the server uses the following dependencies:
+ * Express for delivering static client files, and more beutiful code.
+ * Socket.io for websocket communication.
+ * Winston for logging.
+
+### tests
+
+I have not started with tests yet, but my goal is to learn a bit about unit-tests as well, as that was not part of my education.
+
+## html5-client
+
+The html5 client uses socket.io for communication and is highly dynamic. For layout, twitter's bootstrap is used. The goal here is to have a responsive web page that will work on cell phones, tablets and desktops.
+
+I have no intention on spending a lot of time getting everything to work in every browser. If it works on say, chrome desktop, chrome android and chrome tablet, I'm glad. Hopefully, though, it won't come to that as most browsers these days acctually follow the standard, and libraries like jQuery and socket.io takes care of the rest.
