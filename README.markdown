@@ -9,9 +9,9 @@ The server is written with node.js. As this is my first time with a node.js appl
 ### dependencies
 
 Currently (this WILL change a lot), the server uses the following dependencies:
- * Express for delivering static client files, and more beutiful code.
- * Socket.io for websocket communication.
- * Winston for logging.
+ * Express for delivering static client files, and more beutiful code
+ * Socket.io for websocket communication
+ * Winston for logging
 
 ### tests
 
