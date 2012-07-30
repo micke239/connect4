@@ -16,11 +16,7 @@ server.listen(props.port, function() {
 });
 
 app.configure(function() {
-    app.use(express.static(__dirname + '/html5_client'));
-});
-
-app.get('/', function(req, res) {
-    res.sendfile(__dirname + "/html5_client/client.html");
+    app.use(express.static(__dirname + '/client'));
 });
 
 io.sockets.on('connection', function(connection) {
