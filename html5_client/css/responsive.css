@@ -1,0 +1,22 @@
+@media (max-width: 768px) {
+    
+    body {
+        margin:10px;
+    }
+    
+    div.login-box {
+       width:100%; 
+    }
+}
+
+@media (min-width: 768px) {    
+    div#content {
+        margin-right:auto;
+        margin-left:auto;
+        width: 600px;
+    }
+    
+    div.login-box {
+        width:300px;
+    }
+}
