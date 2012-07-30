@@ -1,6 +1,6 @@
 # connect 4
 
-This repository will contain my connect 4 server, and all the its clients. At start, however, there will only be a html5 client.
+This repository contains my connect 4 server, and all of its clients.
 
 ## server
 
@@ -9,13 +9,13 @@ The server is written with node.js. As this is my first time with a node.js appl
 ### dependencies
 
 Currently (this WILL change a lot), the server uses the following dependencies:
- * Express for delivering static client files, and more beutiful code
+ * Express for delivering static client files beutifully
  * Socket.io for websocket communication
  * Winston for logging
 
 ### tests
 
-I have not started with tests yet, but my goal is to learn a bit about unit-tests as well, as that was not part of my education.
+I have not started with any tests yet, but my goal is to learn a bit about unit-tests as well, as that was not part of my education.
 
 ## html5-client
 
