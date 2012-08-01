@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app>
+<html ng-app="connect4">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,21 +12,12 @@
 	<link href="/css/responsive.css" rel="stylesheet"/>
 	<script type="text/javascript" src="/js/dependencies/angular-1.0.1.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="/js/controller/LoginController.js"></script>
-	<!--script src="/js/handler/LobbyHandler.js"></script-->
-	<!--script type="text/javascript">
-			socket = io.connect('http://localhost:4711/');
- 	</script-->
+	<script src="/js/connect4.js"></script>
+	<script src="/js/socket.js"></script>
+	<script src="/js/controller/lobbycontroller.js"></script>
 </head>
 <body>
-	<div id="content">
-		<div ng-controller="LoginController" class="login-box">
-			<form ng-submit="login()">
-				<div><input type="text" ng-model="userName" placeholder="choose a user name"></div>
-				<div><input type="submit" class="btn btn-large login" value="continue already!"></div>
-			</form>
-		</div>
-	</div>
+	<div id="content" ng-view></div>
 <!--	<div class="alert alert-info" style="display:none;width:365px;margin:5px 0 0 5px;" id="confirm_box">
 		<text>hello</text>
 		<div style="margin-top:5px;">

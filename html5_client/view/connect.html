@@ -1,0 +1,10 @@
+<div ng-controller="LobbyController" class="login-box">
+	<form ng-submit="login()">
+		<div>
+			<input type="text" ng-model="userName" required ng-change="checkUserNameAvailability()" placeholder="choose a user name">
+		</div>
+		<div>
+			<input type="submit" class="btn btn-large login" ng-class="{'btn-danger':!nameAvailable, 'btn-success':nameAvailable}" value="{{btnText}}">
+		</div>
+	</form>
+</div>

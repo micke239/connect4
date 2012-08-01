@@ -24,6 +24,10 @@ var leaveLobby = function(userName) {
 };
 
 module.exports = function(connection) {
+    connection.on('userNameAvailabilityCheck', function(userName) {
+        this.emit('userNameAvailabilityCheckAnswer', !lobby.hasConnection(userName));
+    });
+    
     connection.on('leaveLobby', function() {
         leaveLobby(this.userData.user.userName());
     });
