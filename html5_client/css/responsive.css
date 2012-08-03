@@ -4,8 +4,12 @@
         margin:10px;
     }
     
-    div.login-box {
+    div.connect-box, div.lobby-box {
        width:100%; 
+    }
+    
+    div.users-container {
+        width:100%;
     }
 }
 
@@ -16,7 +20,19 @@
         width: 600px;
     }
     
-    div.login-box {
+    div.connect-box, div.lobby-btns {
         width:300px;
+    }
+    
+    div.lobby-btns {
+        vertical-align: top;
+        margin-top: 37px;
+        display:inline-block;
+    }
+    
+    div.users-container {
+        width:266px;
+        margin-left:30px;
+        display:inline-block;
     }
 }

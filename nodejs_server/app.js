@@ -4,7 +4,6 @@ var props = require('./properties'),
     logger = require('winston'),
     addLobbyEvents = require('./events/LobbyEvents.js'),
     addGameEvents = require('./events/GameEvents.js');
-    addInitEvents = require('./events/InitEvents.js');
 
 var app = express();
 var server = http.createServer(app);
@@ -21,7 +20,6 @@ app.configure(function() {
 
 io.sockets.on('connection', function(connection) {
     connection.userData = {};
-    addInitEvents(connection);
     addLobbyEvents(connection);
     addGameEvents(connection);
 });

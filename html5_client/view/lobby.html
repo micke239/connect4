@@ -1,14 +1,15 @@
-<div style="margin:5px 0 0 10px;display:inline-block;vertical-align:top;width:200px;">
-	<button class="btn" style="width:200px;margin-top:5px;" id="selectedFrenemy">Play selected frenemy</button>
-	<button class="btn" style="width:200px;margin-top:5px;" id="randomFrenemy">Play random frenemy</button>
-</div>	
-<div style="margin:5px 0 0 5px; width:200px;display:inline-block;">
-	<ul class="nav nav-tabs nav-stacked" id="users">
-	</ul>
+<div ng-controller="LobbyController" class="lobby-box">
+	<div class="lobby-btns">
+		<input type="submit" class="btn btn-large" id="selectedFrenemy" value="Play selected frenemy">
+		<input type="submit" class="btn btn-large" id="randomFrenemy" value="Play random frenemy">
+	</div>
+	<div class="users-container">
+		<ul class="nav nav-tabs nav-stacked" id="users">
+			<li class="nav-header">Users online</li>
+			<li><input type="text" placeholder="search" ng-model="search">
+			<li ng-repeat="frenemy in frenemies | filter:search | orderBy:frenemy">
+				<a>{{frenemy}}</a>
+			</li>
+		</ul>
+	</div>
 </div>
-<div id="usrName"></div>
-<script type="text/javascript">
-
-</script>
-<script type="text/javascript" src="/js/event/LobbyEvents.js"></script>
-<script type="text/javascript" src="/js/controller/LobbyHandler.js"></script>

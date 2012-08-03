@@ -1,5 +1,6 @@
 var logger = require('winston'),
-    lobby = require('../model/Lobby.js');
+    lobby = require('../model/Lobby.js'),
+    User = require('../model/User.js');
 
 var alertUsersOnLeave = function(userNameThatLeft) {
     var connectionsInLobby = lobby.getConnectionsInLobby();
@@ -18,7 +19,7 @@ var alertUsersOnJoin = function(userNameThatJoined) {
 };
 
 var leaveLobby = function(userName) {
-    lobby.removeUser(userName);
+    lobby.removeConnection(userName);
     alertUsersOnLeave(userName);
     logger.info(userName + " has left the lobby :(");
 };
@@ -65,14 +66,6 @@ module.exports = function(connection) {
         }
     });
 
-    connection.on('joinLobby', function() {
-        lobby.addConnection(this);
-
-        alertUsersOnJoin(this.userData.user.userName());
-
-        logger.info(this.userData.user.userName() + " joined the lobby!");
-    });
-
     connection.on('getUsersInLobby', function() {
         this.emit('usersInLobby', lobby.getUserNamesInLobby());
     });
@@ -89,4 +82,15 @@ module.exports = function(connection) {
             }
         }
     });
+    
+    connection.on('connect', function(userName) {
+        this.userData.user = new User(userName);
+        this.emit('connectSuccess', userName);
+        
+        lobby.addConnection(this);
+
+        alertUsersOnJoin(this.userData.user.userName());
+
+        logger.info(this.userData.user.userName() + " joined the lobby!");
+    });   
 };

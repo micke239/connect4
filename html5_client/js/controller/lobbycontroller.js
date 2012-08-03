@@ -1,8 +1,9 @@
-function LobbyController($scope, $socket) {
+function LobbyController($scope, $socket, $location) {
     $scope.nameAvailable = false;
     $scope.btnText = "'" + ($scope.userName || "'") + " not available : (";
-    $scope.login = function($socket) {
-        alert($scope.userName);
+    $scope.frenemies = ['Hilda', 'Matilda', 'Erik', 'Frida', 'Micke'];
+    $scope.connect = function() {
+        $socket.emit('connect', $scope.userName);
     };
     
     $scope.checkUserNameAvailability = function() {
@@ -21,6 +22,26 @@ function LobbyController($scope, $socket) {
          } else {
              $scope.btnText = $scope.userName + " not available : (";
          }
+    });
+    
+    $socket.on('connectSuccess', function(userNameId) {
+        $location.path('/lobby/')
+        $socket.emit('getUsersInLobby');
+    });
+    
+    $socket.on('usersInLobby', function() {
+        $scope.frenemyList.clear();
+        for (var i = 0; i < userNames.length; i++) {
+    		$scope.frenemyList.add(userNames[i]);
+    	}
+    });
+
+    $socket.on('userJoinedLobby', function(userName) {
+    	$scope.frenemyList.add(userName);
+    });
+
+    $socket.on('userLeftLobby', function(userName) {
+    	$scope.frenemyList.remove(userName);
     });
 }
 
@@ -71,19 +92,4 @@ var removeFrenemyFromLobby = function(name) {
 		});
 	});
 };
-
-socket.on('usersInLobby', function() {
-    clearLobby(); 
-    for (var i = 0; i < userNames.length; i++) {
-		addFrenemyToLobby(userNames[i]);
-	}
-});
-
-socket.on('userJoinedLobby', function(userName) {
-	addFrenemyToLobby(userName);
-});
-
-socket.on('userLeftLobby', function(userName) {
-	removeFrenemyFromLobby(userName);
-});
 */
