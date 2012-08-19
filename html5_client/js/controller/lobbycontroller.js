@@ -1,4 +1,4 @@
-function LobbyController($scope, $socket) {
+function LobbyController($scope, $socket, $location) {
     $scope.frenemies = {};
     
     $scope.$on('$viewContentLoaded', function() {
@@ -49,6 +49,9 @@ function LobbyController($scope, $socket) {
     });
     
     $socket.on('gameRequestResponse', function(obj) {
+    	if (obj.accepted) {
+    		$location.path('/game/');
+    	}
     	console.log(obj.opponentName + " accepted: " + obj.accept);
     });
 }
