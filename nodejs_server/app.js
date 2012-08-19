@@ -18,6 +18,10 @@ app.configure(function() {
     app.use(express.static(__dirname + '/client'));
 });
 
+app.get('/*', function(req, res) {
+	res.sendfile(__dirname + '/client/client.html')
+});
+
 io.sockets.on('connection', function(connection) {
     connection.userData = {};
     addLobbyEvents(connection);

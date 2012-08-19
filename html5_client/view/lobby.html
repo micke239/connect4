@@ -1,14 +1,14 @@
-<div ng-controller="LobbyController" class="lobby-box">
+<div class="lobby-box">
 	<div class="lobby-btns">
-		<input type="submit" class="btn btn-large" id="selectedFrenemy" value="Play selected frenemy">
-		<input type="submit" class="btn btn-large" id="randomFrenemy" value="Play random frenemy">
+		<button class="btn btn-large" id="selectedFrenemy" ng-click="playSelected()">Play selected frenemy</button>
+		<button class="btn btn-large" id="randomFrenemy" ng-click="playRandom()">Play random frenemy</button>
 	</div>
 	<div class="users-container">
 		<ul class="nav nav-tabs nav-stacked" id="users">
 			<li class="nav-header">Users online</li>
-			<li><input type="text" placeholder="search" ng-model="search">
-			<li ng-repeat="frenemy in frenemies | filter:search | orderBy:frenemy">
-				<a>{{frenemy}}</a>
+			<li><input type="text" placeholder="search" ng-model="search"></li>
+			<li ng-repeat="(frenemy, active) in frenemies | fieldSearchFilter:search | orderBy:frenemy" ng-class="{'active':active}">
+				<a ng-click="selectFrenemy(frenemy)">{{frenemy}}</a>
 			</li>
 		</ul>
 	</div>

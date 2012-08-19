@@ -39,25 +39,19 @@ module.exports = function(connection) {
         if (lobby.hasConnection(opponentName)) {
             lobby.getConnection(opponentName).emit('gameRequest', userName);
         } else {
-            this.emit('gameRequestResponse', {
-                opponent: opponentName,
-                accept: false
-            });
+            this.emit('gameRequestResponse', { opponentName: opponentName, accept: false});
         }
     });
 
     connection.on('gameRequestResponse', function(obj) {
         var userName = this.userData.user.userName();
-        logger.info(this.userData.user.userName() + " responded on " + obj.opponentName + "'s request: " + obj.accepted);
+        logger.info(userName + " responded on " + obj.opponentName + "'s request: " + obj.accept);
 
         var requester = lobby.getConnection(obj.opponentName);
-        requester.emit('gameRequestResponse', {
-            opponent: userName,
-            accepted: obj.accepted
-        });
+        requester.emit('gameRequestResponse', {opponentName: userName, accept: obj.accept});
 
-        if (obj.accepted) {
-            logger.log(requesteduser.getUserName() + " and " + requestersName + " has agreed upon playing a game of connect-4.");
+        if (obj.accept) {
+            logger.log(userName + " and " + obj.opponentName + " has agreed upon playing a game of connect-4.");
 
             leaveLobby(obj.opponentName);
             leaveLobby(userName);

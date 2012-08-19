@@ -1,7 +1,8 @@
+
 .connect-box input {
     width: 100%;
 }
-.lobby-box input {
+.lobby-box input, .lobby-box button {
     width: 100%;
 }
 

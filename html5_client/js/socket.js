@@ -1,5 +1,5 @@
 connect4.factory('$socket', function($rootScope) {
-    var socket = io.connect('http://localhost:4711/');
+    var socket = io.connect();
     return {
         on: function(eventName, callback) {
             socket.on(eventName, function() {

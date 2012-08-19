@@ -1,47 +1,55 @@
-function LobbyController($scope, $socket, $location) {
-    $scope.nameAvailable = false;
-    $scope.btnText = "'" + ($scope.userName || "'") + " not available : (";
-    $scope.frenemies = ['Hilda', 'Matilda', 'Erik', 'Frida', 'Micke'];
-    $scope.connect = function() {
-        $socket.emit('connect', $scope.userName);
-    };
+function LobbyController($scope, $socket) {
+    $scope.frenemies = {};
     
-    $scope.checkUserNameAvailability = function() {
-        if ($scope.userName) {
-            $socket.emit('userNameAvailabilityCheck', $scope.userName);
-        } else {
-             $scope.btnText = "''" + " not available : (";
-             $scope.nameAvailable = false;
-        }
-    };
-    
-    $socket.on('userNameAvailabilityCheckAnswer', function(nameAvailable) {
-         $scope.nameAvailable = nameAvailable;
-         if ($scope.nameAvailable) {
-             $scope.btnText = "connect already!";
-         } else {
-             $scope.btnText = $scope.userName + " not available : (";
-         }
+    $scope.$on('$viewContentLoaded', function() {
+    	$socket.emit('getUsersInLobby');
     });
     
-    $socket.on('connectSuccess', function(userNameId) {
-        $location.path('/lobby/')
-        $socket.emit('getUsersInLobby');
-    });
+    $scope.selectFrenemy = function(frenemy) {
+    	if ($scope.currentlySelected) {
+    		if ($scope.frenemies[$scope.currentlySelected]) {
+    			$scope.frenemies[$scope.currentlySelected] = false;
+    		}
+    	}
+    	
+    	$scope.frenemies[frenemy] = true;
+    	$scope.currentlySelected = frenemy;
+    }
     
-    $socket.on('usersInLobby', function() {
-        $scope.frenemyList.clear();
+    $scope.playRandom = function() {
+    	
+    }
+    
+    $scope.playSelected = function() {
+    	$socket.emit('requestGame', $scope.currentlySelected);
+    }
+    
+    $socket.on('usersInLobby', function(userNames) {
+        delete $scope.frenemies;
+        $scope.frenemies = {};
         for (var i = 0; i < userNames.length; i++) {
-    		$scope.frenemyList.add(userNames[i]);
+    		$scope.frenemies[userNames[i]] = false;
     	}
     });
 
     $socket.on('userJoinedLobby', function(userName) {
-    	$scope.frenemyList.add(userName);
+    	$scope.frenemies[userName] = false;
     });
 
     $socket.on('userLeftLobby', function(userName) {
-    	$scope.frenemyList.remove(userName);
+    	delete $scope.frenemies[userName];
+    });
+    
+    $socket.on('gameRequest', function(frenemy) {
+    	if (confirm("Game request from " + frenemy + ". Accept?")) {
+    		$socket.emit('gameRequestResponse', {opponentName: frenemy, accept: true});
+    	} else {
+    		$socket.emit('gameRequestResponse', {opponentName: frenemy, accept: false});
+    	}
+    });
+    
+    $socket.on('gameRequestResponse', function(obj) {
+    	console.log(obj.opponentName + " accepted: " + obj.accept);
     });
 }
 
