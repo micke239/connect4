@@ -16,7 +16,7 @@ function ConnectController($scope, $socket, $location) {
 	});
 	
 	$socket.on('connectSuccess', function(userNameId) {
-	    $location.path('/lobby/');
+	    $location.path('/lobby');
 	});
 	
 	$socket.on('userNameAvailabilityCheckAnswer', function(nameAvailable) {

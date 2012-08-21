@@ -43,64 +43,15 @@ function LobbyController($scope, $socket, $location) {
     $socket.on('gameRequest', function(frenemy) {
     	if (confirm("Game request from " + frenemy + ". Accept?")) {
     		$socket.emit('gameRequestResponse', {opponentName: frenemy, accept: true});
+    		$location.path('/game');
     	} else {
     		$socket.emit('gameRequestResponse', {opponentName: frenemy, accept: false});
     	}
     });
     
     $socket.on('gameRequestResponse', function(obj) {
-    	if (obj.accepted) {
-    		$location.path('/game/');
+    	if (obj.accept) {
+    		$location.path('/game');
     	}
-    	console.log(obj.opponentName + " accepted: " + obj.accept);
     });
 }
-
-/*
-socket.on('loginSuccess', function(userName) {
-    socket.emit('joinLobby');
-    $.get('/view/lobby.html', function(data) {
-        $('#content').html(data);
-        $('#usrName').text(userName);
-    });
-});
-
-var joinedLobby = function() {
-    
-};
-
-var clearLobby = function() {
-	$("#users").children().each(function() {
-		$(this).remove();
-	});
-};
-
-var addFrenemyToLobby = function(name) {
-	var users = document.getElementById("users");
-
-	var listItem = document.createElement('li');
-
-	$(listItem).click(function() {
-		$('#users li.active').removeClass('active');
-		$(this).addClass('active');
-	});
-
-	var anchor = document.createElement('a');
-	anchor.setAttribute('href', '#');
-	anchor.appendChild(document.createTextNode(name));
-
-	listItem.appendChild(anchor);
-
-	users.appendChild(listItem);
-};
-
-var removeFrenemyFromLobby = function(name) {
-	$("#users").children().each(function() {
-		$(this).children().filter('a').each(function() {
-			if ($(this).text() === name) {
-				$(this).parent().remove();
-			}
-		});
-	});
-};
-*/

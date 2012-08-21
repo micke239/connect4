@@ -1,5 +1,4 @@
-@media (max-width: 768px) {
-    
+@media screen and (max-width: 768px) {
     body {
         margin:10px;
     }
@@ -13,7 +12,21 @@
     }
 }
 
-@media (min-width: 768px) {    
+@media screen and (max-width: 768px) and (orientation: landscape) {
+	#backCanvas, #frontCanvas {
+		height: 100%;
+		width:auto;
+	}
+}
+
+@media screen and (max-width: 768px) and (orientation: portrait) {
+	#backCanvas, #frontCanvas {
+		width: 100%;
+		height:auto;
+	}
+}
+
+@media screen and (min-width: 768px) {    
     div#content {
         margin-right:auto;
         margin-left:auto;

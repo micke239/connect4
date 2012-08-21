@@ -1,3 +1,16 @@
+#backCanvas {
+	position:relative;
+	width:100%;
+	height:auto;
+	z-index: 0;
+}
+
+#frontCanvas {
+	position:relative;
+	width:100%;
+	height:auto;
+	z-index: 1;	
+}
 
 .connect-box input {
     width: 100%;
