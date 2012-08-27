@@ -1,4 +1,6 @@
 function GameController($scope, $socket, $location) {
+	var renderer, rows, cols, squareSize, canvas, frontCtx, backCtx;
+	//TODO: FIX THIS
 	var checkScreenOrientationAndAdjustCanvases = function() {		
 		for (var i = 0; i < arguments.length; i++) {
 			//cell phone
@@ -11,112 +13,134 @@ function GameController($scope, $socket, $location) {
 				} 
 				//portrait
 				else {
-					arguments[i].canvasStyle.height = arguments[i].offsetWidth * ($scope.rows/$scope.cols) + "px";
+					arguments[i].canvasStyle.height = arguments[i].offsetWidth * (rows/cols) + "px";
 				}
 			} else {
-				arguments[i].canvasStyle.height = arguments[i].offsetWidth * ($scope.rows/$scope.cols) + "px";
+				arguments[i].canvasStyle.height = arguments[i].offsetWidth * (rows/cols) + "px";
 			}
 		}
-		
-		$scope.canvas.canvasStyle.top = "-" + angular.element($scope.canvas).height() + "px";
+
+		frontCanvas.canvasStyle.top = "-" + frontCanvas.height() + "px";
 	};
 	
     $scope.$on('$viewContentLoaded', function() {
-    	var backCanvas = document.getElementById("backCanvas");
-    	$scope.canvas = document.getElementById("frontCanvas");
+    	backCanvas = angular.element("#backCanvas");
+    	frontCanvas = angular.element("#frontCanvas");
+    	frontCtx = frontCanvas[0].getContext('2d');
+		backCtx = backCanvas[0].getContext('2d');
     	
-    	$scope.squareSize = 100;
-    	$scope.cols = frontCanvas.width / $scope.squareSize;
-    	$scope.rows = frontCanvas.height / $scope.squareSize;
+    	squareSize = 100;
+    	cols = frontCanvas[0].width / squareSize;
+    	rows = frontCanvas[0].height / squareSize;
     	
     	frontCanvas.canvasStyle = {};
     	backCanvas.canvasStyle = {};
     	$scope.frontCanvasStyle = frontCanvas.canvasStyle;
     	$scope.backCanvasStyle = backCanvas.canvasStyle;
     	
-    	$scope.addGameInteractionEvents(frontCanvas);
+    	addGameInteractionEvents(frontCanvas);
     	
     	checkScreenOrientationAndAdjustCanvases(frontCanvas, backCanvas);
-    	
-		$scope.ctx = frontCanvas.getContext('2d');
 		
-		$scope.drawBackground(backCanvas.getContext('2d'));
+		drawBackground();
     });
     
-    $scope.drawBackground = function(ctx) {
-    	ctx.strokeStyle = "black";
-		ctx.beginPath();
-		for (var i = 0; i <= $scope.cols; i++) {
-			var extra = 0;
-			if (i == 0) {
-				extra = 1;
-			} else if (i == $scope.cols) {
-				extra = -1;
-			}
-			ctx.moveTo(i*$scope.squareSize + extra, $scope.squareSize);
-			ctx.lineTo(i*$scope.squareSize + extra, $scope.rows * $scope.squareSize);
-		}
-		for (var i = 1; i <= $scope.rows; i++) {
-			var extra = 0;
-			if (i == $scope.rows) {
-				extra = -1;
-			}
-			ctx.moveTo(0, i*$scope.squareSize + extra);
-			ctx.lineTo($scope.cols * $scope.squareSize, i*$scope.squareSize + extra);
-		}
-		ctx.stroke();
-    };
-    
-   $scope.addGameInteractionEvents = function(element) {
+  addGameInteractionEvents = function(element) {
    		element = angular.element(element);
-   		element.on('click', $scope.handleDone);
-   		element.on('mousemove', $scope.handleMove);
-   		element.on('mouseout', $scope.handleOut);
+   		element.on('click', handleDone);
+   		element.on('mousemove', handleMove);
+   		element.on('mouseout', handleOut);
    };
    
    
-   $scope.handleDone = function(evt) {
+   handleDone = function(evt) {
    		console.log(evt);
    };
    
-   $scope.handleOut = function(evt) {
+   handleOut = function(evt) {
    		$scope.$apply(function() {
-   			$scope.renderModel.hoverIndicator = undefined;
+   			$scope.render.hover = undefined;
    		});
    };
    
-   $scope.handleMove = function(evt) {
+   handleMove = function(evt) {
    		$scope.$apply(function() {
-   			var coords = $scope.getCoords(evt);
-	   		$scope.renderModel.hoverIndicator = Math.floor(coords.x / $scope.squareSize);
+   			var coords = getCoords(evt);
+	   		$scope.render.hover = Math.floor(coords.x / squareSize);
    		});
    };
    
-   $scope.getCoords = function(evt) {
+   getCoords = function(evt) {
    		var coords = {};
-   		var canvas = angular.element($scope.canvas);
-   		
-   		coords.x = Math.round(evt.offsetX * (($scope.squareSize * $scope.cols) / canvas.width()));
-   		coords.y = Math.round(evt.offsetY * (($scope.squareSize * $scope.rows) / canvas.height()));
+   		coords.x = Math.round(evt.offsetX * ((squareSize * cols) / frontCanvas.width()));
+   		coords.y = Math.round(evt.offsetY * ((squareSize * rows) / frontCanvas.height()));
    		
    		return coords;
    };
    
-   $scope.renderModel = {};
-   $scope.$watch('renderModel.hoverIndicator', function(newValue, oldValue) {
-   		var halfSquareSize = $scope.squareSize / 2;
-   		var oldX = oldValue * $scope.squareSize + halfSquareSize;
-   		$scope.ctx.clearRect(oldX-10, halfSquareSize-10, 20, 20);
+   $scope.render = {};
+   $scope.$watch('render.hover', function(newValue, oldValue) {
+   		var circleRadius = 5;
+   		var halfSquareSize = squareSize / 2;
+   		var oldX = oldValue * squareSize + halfSquareSize;
+   		frontCtx.clearRect(oldX-circleRadius, halfSquareSize-circleRadius, circleRadius*2, circleRadius*2);
    		
    		if (newValue != undefined) {
-			var newX = newValue * $scope.squareSize + halfSquareSize;
+			var newX = newValue * squareSize + halfSquareSize;
 
    			// draw circle
-   			$scope.ctx.fillStyle="rgba(255,0,0,0.8)";
-			$scope.ctx.beginPath();
-			$scope.ctx.arc(newX, halfSquareSize, 10, 0, Math.PI*2, true);
-			$scope.ctx.closePath();
-			$scope.ctx.fill();
+   			frontCtx.fillStyle="rgba(255,0,0,0.8)";
+			frontCtx.beginPath();
+			frontCtx.arc(newX, halfSquareSize, circleRadius, 0, Math.PI*2, true);
+			frontCtx.closePath();
+			frontCtx.fill();
    		}
    });
+   
+   $scope.$watch('render.grid', function(newValue, oldValue) {
+   		//renderer.addPiece(newValue);
+   });
+   
+   
+   	var drawModel = function(newValue, oldValue) {
+		var circleRadius = 5;
+   		var halfSquareSize = squareSize / 2;
+   		var oldX = oldValue * squareSize + halfSquareSize;
+   		frontCtx.clearRect(oldX-circleRadius, halfSquareSize-circleRadius, circleRadius*2, circleRadius*2);
+   		
+   		if (newValue != undefined) {
+			var newX = newValue * squareSize + halfSquareSize;
+
+   			// draw circle
+   			frontCtx.fillStyle="rgba(255,0,0,0.8)";
+			frontCtx.beginPath();
+			frontCtx.arc(newX, halfSquareSize, circleRadius, 0, Math.PI*2, true);
+			frontCtx.closePath();
+			frontCtx.fill();
+   		}
+	};
+	
+	var drawBackground = function() {
+		backCtx.strokeStyle = "black";
+		backCtx.beginPath();
+		for (var i = 0; i <= cols; i++) {
+			var extra = 0;
+			if (i == 0) {
+				extra = 1;
+			} else if (i == cols) {
+				extra = -1;
+			}
+			backCtx.moveTo(i*squareSize + extra, squareSize);
+			backCtx.lineTo(i*squareSize + extra, rows * squareSize);
+		}
+		for (var i = 1; i <= rows; i++) {
+			var extra = 0;
+			if (i == rows) {
+				extra = -1;
+			}
+			backCtx.moveTo(0, i*squareSize + extra);
+			backCtx.lineTo(cols * squareSize, i*squareSize + extra);
+		}
+		backCtx.stroke();
+	};
 }
